@@ -5,7 +5,8 @@
   .then((response) => response.json())
   .then((data) => {
     mydata = data 
-    document.getElementById('temperature').innerHTML = mydata['temperature']
+    p = document.getElementById('temperature')
+    = mydata['temperature']
     console.log(data)
 });
         
@@ -16,6 +17,6 @@
         <meta charset="utf-8">
     </head>
     <body>
-        <p id="temperature">서울은 지금..</p>
+        <p id="temperature">서울은 기온은 지금</p>
     </body>
 </html>
