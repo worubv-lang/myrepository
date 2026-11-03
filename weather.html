@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <script>
+        fetch('https://goweather.xyz/v2/weather/Seoul')
+  .then((response) => response.json())
+  .then((data) => {
+    mydata = data 
+    document.getElementById('temperature').innerHTML = mydata['temperature']
+    console.log(data)
+});
+        
+
+    </script>
+
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <p id="temperature">서울은 지금..</p>
+    </body>
+</html>
