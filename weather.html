@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html>
-    <script>
-        fetch('https://goweather.xyz/v2/weather/Seoul')
-  .then((response) => response.json())
-  .then((data) => {
-    mydata = data 
-    p = document.getElementById('temperature')
-    = mydata['temperature']
-    console.log(data)
-});
-        
-
-    </script>
-
     <head>
         <meta charset="utf-8">
     </head>
     <body>
-        <p id="temperature">서울은 기온은 지금</p>
+        <script>
+            fetch('https://goweather.xyz/v2/weather/Seoul')
+            .then((response) => response.json())
+            .then((data) => {
+                document.write("서울 기온은"+ data['temperature'])   
+                document.write("날씨는"+data['description'])
+            });
+        </script>
     </body>
 </html>
