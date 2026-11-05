@@ -1,10 +1,9 @@
-node.js를 공부하며 작성한 연습 코드들입니다.
+-11/05일 공부: 
 
--11/03일 공부 요약: 
-github에서 업로드하는 방법, nodejs express 설치, express로 서버 만들기(index.js), 날씨 api 사용해보기.(weather.js)
+mycalc.mjs, math.mjs, calc.html:
 
--11/04일 공부 요약: 
-github의 branch 사용법, nodemon 설치, mjs란?(calc.mjs, math.mjs), fetch-promise
+nodemon mycalc.mjs 를 실행하고 localhost:3000으로 접속하면 calc.html 파일이 전송된다. calc.html에서 a,b값을 입력하고 버튼을 누르면 /add, /sub로 이동하는 링크는 쿼리가 추가된 주소로 바뀐다. 바뀐 주소로 이동하면 a,b값을 계산한 결과를 볼 수 있다.
 
--11/05일 공부 요약: 
-query로 호출하는 방법(calc.mjs, math.mjs 수정), html파일에서 js파일 불러오기(weather.html추가, weather.js 수정)
+weather.html, weather.js:
+
+weather.html에는 weather.js파일을 받아들인다. weather.js에는 getweather(src)함수가 있다. 이 함수는 'https://goweather.xyz/v2/weather/'에 src(지역의 이름이 들어갈 파라미터) api를 받아 html을 변경한다.
