@@ -4,7 +4,7 @@ import express from 'express' //mjs에서 모듈가져오기는 request 가 아�
 const app = express();
 
 app.get('/', (req,res)=>{
-  res.send('add, sub에서 값을 계산')
+  res.send('add, sub에서 a,b값을 계산')
 })
 
 // query를 쓴 호출: http://localhost:3000/add?a=1&b=2
@@ -23,7 +23,7 @@ app.get("/sub", (req,res)=>{
     if (Number.isNaN(a) || Number.isNaN(b)) {
         return res.status(400).json({ error: "a, b는 숫자여야 합니다" });
     }
-    res.json({ result: math.add(a, b) });
+    res.json({ result: math.sub(a, b) });
 })
 
 app.listen(3000, () => {
