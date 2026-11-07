@@ -8,3 +8,6 @@ github의 branch 사용법, nodemon 설치, mjs란?(calc.mjs, math.mjs), fetch-p
 
 -11/05일 공부 요약: 
 query로 호출하는 방법(calc.mjs, math.mjs 수정), html파일에서 js파일 불러오기(weather.html추가, weather.js 수정)
+
+-11/06일 - 11/07일 공부 요약:
+nodejs 기본 모듈 fs, os, path, process 공부, 실제 코드 분석: https://github.com/apoorvdwi/TodoList-CLI/tree/master
