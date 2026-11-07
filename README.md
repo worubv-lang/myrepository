@@ -14,5 +14,5 @@ nodejs의 기본 모듈 공부, 실습: os, fs, path
 백엔드 개념 공부: 서버, 데이터 베이스, queue
 
 -더 필요한 공부
-github 리포지토리 관리, MySQL또는 mongoDB 실습
+github 리포지토리 관리, process, 비동기 처리
 json 다루는 연습
