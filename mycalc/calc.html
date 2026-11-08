@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계산</title>
+</head>
+<body>
+    <input type="text" name="" id="a">
+    <input type="text" id="b">
+    <button onclick="createUrl()">숫자 입력 버튼</button>
+    <a href="http://localhost:3000/add" id="add">add</a>
+    <a href="http://localhost:3000/sub" id="sub">sub</a>
+<script> 
+  function createUrl(){  
+    let a = document.getElementById("a").value;
+    let b = document.getElementById("b").value;
+    document.getElementById("add").href = `http://localhost:3000/add?a=${a}&b=${b}`
+    document.getElementById("sub").href = `http://localhost:3000/sub?a=${a}&b=${b}`
+  }
+</script>
+
+</body>
+</html>
