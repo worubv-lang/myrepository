@@ -1,4 +1,4 @@
-할 일을 저장하고 수정할 수 있는 CLI프로그램입니다. 
+할 일을 저장하고 수정할 수 있는 CLI프로그램입니다.
 
 index.mjs
 사용방법: 터미널에서 아래의 방법처럼 add, list, done, remove 사용
@@ -18,4 +18,3 @@ node index.mjs remove 1
 storage.mjs
 json파일을 주고 저장하는 save(), load(file) 함수를 index.mjs에 export한다.
 
-*이 코드는 LLM(클로드)을 사용하여 작성하였습니다.
