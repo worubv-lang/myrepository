@@ -1,7 +1,7 @@
 mycalc.mjs에서 서버를 
 
 사용방법  
-터미널에서 아래의 코드로 서버를 열고 다음의 주소로 이동합니다: localhost:3000  
+터미널에서 아래의 코드로 서버를 열고 다음의 주소로 이동합니다: http://localhost:3000  
 ```
 node mycalc.mjs
 ```
