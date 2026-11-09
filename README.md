@@ -13,4 +13,7 @@ query로 호출하는 방법(calc.mjs, math.mjs 수정), html파일에서 js파�
 nodejs의 기본 모듈 fs,process,path 사용하기 (memoCLI의 index.mjs, storage.mjs 추가, 수정)  
   
 -11/08일 수정: 
- 코드 파일로 정리, README작성  
+코드 파일로 정리, README작성  
+
+-11/9일 수정:  
+비동기 처리 promise, async 사용하기(test_code파일의 test_promise.js)
