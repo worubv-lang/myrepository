@@ -1,0 +1,67 @@
+<!doctype html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>영상 글자 인식</title>
+
+<input type="file" id="file" accept="video/*" capture="environment" />
+<button id="go">인식 시작</button>
+<progress id="bar" value="0" max="100" hidden></progress>
+<p id="status"></p>
+<pre id="out" style="white-space: pre-wrap"></pre>
+<button id="dl" hidden>txt 다운로드</button>
+
+<script type="module">
+  const API = 'http://localhost:7071/api'; // 배포 후 https://<FUNC>.azurewebsites.net/api
+  const $ = (id) => document.getElementById(id);
+
+  $('go').onclick = async () => {
+    const file = $('file').files[0];
+    if (!file) return alert('영상을 선택하세요');
+    const ext = (file.name.split('.').pop() || 'mp4').toLowerCase();
+
+    // ① SAS URL 발급
+    $('status').textContent = '업로드 준비 중…';
+    const { jobId, uploadUrl } = await (await fetch(`${API}/jobs?ext=${ext}`, { method: 'POST' })).json();
+
+    // ② Blob 직접 업로드 (진행률 표시를 위해 XHR 사용)
+    await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', uploadUrl);
+      xhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
+      xhr.setRequestHeader('Content-Type', file.type || 'video/mp4');
+      $('bar').hidden = false;
+      xhr.upload.onprogress = (e) => ($('bar').value = (e.loaded / e.total) * 100);
+      xhr.onload = () => (xhr.status < 300 ? resolve() : reject(new Error(`upload ${xhr.status}`)));
+      xhr.onerror = reject;
+      xhr.send(file);
+    });
+
+    // ③ 처리 시작
+    await fetch(`${API}/jobs/${jobId}/start?ext=${ext}`, { method: 'POST' });
+
+    // ④ 폴링
+    $('status').textContent = '글자 인식 중…';
+    while (true) {
+      await new Promise((r) => setTimeout(r, 3000));
+      const job = await (await fetch(`${API}/jobs/${jobId}`)).json();
+      if (job.status === 'done') {
+        $('status').textContent = `완료 (프레임 ${job.frameCount}장)`;
+        $('out').textContent = job.items
+          .map((i) => `[${i.start.toFixed(1)}s~${i.end.toFixed(1)}s] ${i.text}`)
+          .join('\n');
+        $('dl').hidden = false;
+        $('dl').onclick = () => {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(new Blob([job.fullText], { type: 'text/plain' }));
+          a.download = `${jobId}.txt`;
+          a.click();
+        };
+        break;
+      }
+      if (job.status === 'failed') {
+        $('status').textContent = `실패: ${job.error}`;
+        break;
+      }
+    }
+  };
+</script>
