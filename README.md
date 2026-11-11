@@ -17,3 +17,7 @@ nodejs의 기본 모듈 fs,process,path 사용하기 (memoCLI의 index.mjs, stor
 
 -11/9일 수정:  
 비동기 처리 promise, async 사용하기(test_code파일의 test_promise.js)
+
+(11/10일 이후로 azure를 활용하여 개발을 시작하였습니다.)  
+-11/11일 수정:  
+myazure/dev_ocr/video-ocr 업로드  
