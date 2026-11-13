@@ -1,43 +1,39 @@
-//테스트 코드입니다.
-// 사용법: node scripts/smoke.mjs ./sample.mp4 [최대프레임수]
-import { readFileSync } from 'node:fs';
-import { mkdtemp, readdir, readFile, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import path from 'node:path';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mergeFrames } from '../src/lib/merge.mjs';
 
-// local.settings.json 값을 환경변수로 주입 (config.mjs 로드 전에 해야 함)
-Object.assign(process.env, JSON.parse(readFileSync('local.settings.json', 'utf-8')).Values);
+const L = (text, confidence = 0.95) => ({ text, confidence });
 
-const { cfg } = await import('../src/lib/config.mjs');
-const { extractFrames } = await import('../src/lib/frames.mjs');
-const { readImage, mapLimit } = await import('../src/lib/ocr.mjs');
-const { mergeFrames } = await import('../src/lib/merge.mjs');
+test('연속 프레임의 같은 글자는 하나로 합쳐진다', () => {
+  const items = mergeFrames([[L('Welcome to Seoul')], [L('Welcome to Seoul')], [L('Welcome to Seoul')]], { fps: 1 });
+  assert.equal(items.length, 1);
+  assert.equal(items[0].start, 0);
+  assert.equal(items[0].end, 3);
+  assert.equal(items[0].seen, 3);
+});
 
-const [video, maxArg] = process.argv.slice(2);
-if (!video) { console.error('사용법: node scripts/smoke.mjs <영상> [최대프레임수]'); process.exit(1); }
-const MAX = Number(maxArg ?? 30); // 비용 보호용 상한
+test('1글자 오인식은 같은 텍스트로 합치고, 신뢰도 높은 쪽을 남긴다', () => {
+  const items = mergeFrames([[L('Welcome to Seoul', 0.95)], [L('Welcome to Seou1', 0.7)]], { fps: 1 });
+  assert.equal(items.length, 1);
+  assert.equal(items[0].text, 'Welcome to Seoul');
+});
 
-const work = await mkdtemp(path.join(tmpdir(), 'smoke-'));
-try {
-  console.time('ffmpeg');
-  await extractFrames(path.resolve(video), work, cfg.fps);
-  console.timeEnd('ffmpeg');
+test('신뢰도가 낮은 결과는 버린다', () => {
+  assert.equal(mergeFrames([[L('noise text', 0.3)]], { fps: 1 }).length, 0);
+});
 
-  const files = (await readdir(work)).filter((f) => f.endsWith('.jpg')).sort().slice(0, MAX);
-  console.log(`✅ 프레임 ${files.length}장 사용`);
+test('서로 다른 글자는 따로 둔다', () => {
+  const items = mergeFrames([[L('Americano 4500')], [L('Latte 5000')]], { fps: 1 });
+  assert.equal(items.length, 2);
+});
 
-  console.time('ocr');
-  const perFrame = await mapLimit(files, cfg.concurrency, async (f) =>
-    readImage(await readFile(path.join(work, f))),
-  );
-  console.timeEnd('ocr');
+test('gapSec(3초) 넘게 사라졌다 다시 나오면 별개 항목이다', () => {
+  const x = L('Welcome to Seoul');
+  const items = mergeFrames([[x], [], [], [], [], [], [x]], { fps: 1 });
+  assert.equal(items.length, 2);
+});
 
-  perFrame.forEach((lines, i) =>
-    console.log(`frame ${i}: ${lines.map((l) => `${l.text}(${l.confidence.toFixed(2)})`).join(' | ') || '(없음)'}`),
-  );
-
-  const items = mergeFrames(perFrame, { fps: cfg.fps });
-  console.table(items.map(({ text, start, end, confidence, seen }) => ({ text, start, end, confidence, seen })));
-} finally {
-  await rm(work, { recursive: true, force: true });
-}
+test('minSeen: 1프레임짜리 노이즈를 제거한다', () => {
+  const items = mergeFrames([[L('Stable text'), L('random junk')], [L('Stable text')]], { fps: 1, minSeen: 2 });
+  assert.deepEqual(items.map((i) => i.text), ['Stable text']);
+});
