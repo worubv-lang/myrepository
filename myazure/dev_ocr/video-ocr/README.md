@@ -1,5 +1,6 @@
-mircosoft azure에서 제공하는 ocr 엔진를 사용하여 만든 프로젝트입니다. (미완성입니다)  
-구현하려는 앱: 영상을 업로드 하면 영상의 글씨를 텍스트로 변환하는 앱  
+mircosoft azure에서 제공하는 ocr 엔진를 사용하여 만든 프로젝트입니다. 
+아래의 url에서 영상을 업로드하면 텍스트를 출력합니다.
+https://stvideoocr28394.z12.web.core.windows.net/
 
 코드 요약:  
 | 파일 | 역할 |  
