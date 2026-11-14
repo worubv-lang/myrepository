@@ -21,3 +21,6 @@ nodejs의 기본 모듈 fs,process,path 사용하기 (memoCLI의 index.mjs, stor
 (11/10일 이후로 azure를 활용하여 개발을 시작하였습니다.)  
 -11/11일 수정:  
 myazure/dev_ocr/video-ocr 업로드  
+
+-11/14일 수정: 
+영상을 업로드하면 텍스트를 출력하는 웹을 게시하였습니다. 웹의 주소는 myazure/dev_ocr/video-ocr의 readme에 있습니다. 
